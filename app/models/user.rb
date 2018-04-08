@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+    validates :name, presence: true
+    validates :email, presence: true, uniqueness: true
+
     has_many :experiences
 
     has_many :attendances, class_name:  "Attendance",
@@ -6,30 +9,35 @@ class User < ApplicationRecord
                            dependent:   :destroy
     has_many :attend_experiences, through: :attendances
 
-    has_many :relationships, class_name:  "FollowHost",
-                             foreign_key: "follower_id",
-                             dependent:   :destroy
-    has_many :following, through: :relationships, source: :followed
+    has_many :active_relationships, class_name:  "FollowHost",
+                                    foreign_key: "follower_id",
+                                    dependent:   :destroy
+    has_many :following, through: :active_relationships, source: :followed
+
+    has_many :passive_relationships, class_name:  "FollowHost",
+                                     foreign_key: "followed_id",
+                                     dependent:   :destroy
+    has_many :followers, through: :passive_relationships, source: :follower
 
     has_many :active_relationships_as_guest, class_name:  "KudosToHost",
                                              foreign_key: "guest_id",
                                              dependent:   :destroy
     has_many :gave_kudos_as_guest, through: :active_relationships_as_guest, source: :host
 
-    has_many :passive_relationships_as_guest, class_name:  "KudosToHost",
+    has_many :passive_relationships_as_host, class_name:  "KudosToHost",
                                               foreign_key: "host_id",
                                               dependent:   :destroy
-    has_many :given_kudos_as_host, through: :passive_relationships_as_guest, source: :guest
+    has_many :given_kudos_as_host, through: :passive_relationships_as_host, source: :guest
 
     has_many :active_relationships_as_host, class_name:  "KudosToGuest",
                                             foreign_key: "host_id",
                                             dependent:   :destroy
     has_many :gave_kudos_as_host, through: :active_relationships_as_host, source: :guest
 
-    has_many :passive_relationships_as_host, class_name:  "KudosToGuest",
+    has_many :passive_relationships_as_guest, class_name:  "KudosToGuest",
                                              foreign_key: "guest_id",
                                              dependent:   :destroy
-    has_many :given_kudos_as_guest, through: :passive_relationships_as_host, source: :host
+    has_many :given_kudos_as_guest, through: :passive_relationships_as_guest, source: :host
 
     # attend experience.
     def attend(experience)

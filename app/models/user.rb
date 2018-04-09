@@ -1,6 +1,9 @@
 class User < ApplicationRecord
-    validates :name, presence: true
+    attribute :password, :string
+    validates :name, :password, presence: true
     validates :email, presence: true, uniqueness: true
+    before_save :encrypt_password
+    before_create :generate_token
 
     has_many :experiences
     has_many :kudos
@@ -52,5 +55,30 @@ class User < ApplicationRecord
 
     def following_counter()
         following.count
+    end
+
+    # Checks if a user is authenticated
+    def self.authenticate(email, password)
+      user = self.find_by_email(email)
+      if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
+        user
+      else
+        nil
+      end
+    end
+
+    # Salts and hashes a user's password
+    def encrypt_password
+      if password.present?
+        self.password_salt = BCrypt::Engine.generate_salt
+        self.password_hash = BCrypt::Engine.hash_secret(password, password_salt)
+      end
+    end
+
+    # Generates a token for a user
+    def generate_token
+      token_gen = SecureRandom.hex
+      self.token = token_gen
+      token_gen
     end
 end

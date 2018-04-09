@@ -1,6 +1,7 @@
 class Experience < ApplicationRecord
     belongs_to :user
-    
+    attribute :user
+
     has_many :attendances, class_name:  "Attendance",
                            foreign_key: "attend_experience_id",
                            dependent:   :destroy

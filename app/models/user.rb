@@ -1,13 +1,19 @@
 class User < ApplicationRecord
     attribute :password, :string
+    attribute :did_follow, :boolean
+    attribute :followers_count, :integer
+    attribute :following_count, :integer
+
     validates :name, :password, presence: true
     validates :email, presence: true, uniqueness: true
+
     before_save :encrypt_password
     before_create :generate_token
 
     has_many :experiences
     has_many :kudos
-    has_many :get_kudos, class_name:  "Kudo",
+
+    has_many :given_kudos, class_name:  "Kudo",
                          foreign_key: "taker_id",
                          dependent:   :destroy
 

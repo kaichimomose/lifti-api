@@ -4,13 +4,24 @@ class ExperiencesController < ApplicationController
   # GET /experiences
   def index
     @experiences = Experience.all
-
+    for experience in @experiences do
+        host = User.find(experience.user_id)
+        host.following_count = host.following_counter
+        host.followers_count = host.followers_counter
+        host.did_follow = current_user.following?(host)
+        experience.user = host
+    end
     render json: @experiences
   end
 
   # GET /experiences/1
   def show
-    render json: @experience, :methods => :user
+    host = User.find(@experience.user_id)
+    host.following_count = host.following_counter
+    host.followers_count = host.followers_counter
+    host.did_follow = current_user.following?(host)
+    @experience.user = host
+    render json: @experience
   end
 
   # GET /experiences/1/guests

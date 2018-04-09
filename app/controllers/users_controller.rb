@@ -14,6 +14,7 @@ class UsersController < ApplicationController
     # render json: @user, :methods => :followers_count :following_count
     @user.followers_count = @user.followers_counter
     @user.following_count = @user.following_counter
+    @user.did_follow = current_user.following?(@user)
     render :json => @user
   end
 
@@ -41,7 +42,7 @@ class UsersController < ApplicationController
   # GET /users/1/given_kudos
   def given_kudos
     @user  = User.find(params[:id])
-    @kudos = @user.get_kudos
+    @kudos = @user.given_kudos
     render json: @kudos
   end
 
@@ -56,6 +57,13 @@ class UsersController < ApplicationController
     end
   end
 
+  def follow
+      host = User.find(params[:followed_id])
+      current_user.follow(host)
+      @follow_host = current_user.active_relationships.find_by_followed_id(2)
+      render json: @follow_host, status: :created
+  end
+
   # PATCH/PUT /users/1
   def update
     if @user.update(user_params)
@@ -68,6 +76,11 @@ class UsersController < ApplicationController
   # DELETE /users/1
   def destroy
     @user.destroy
+  end
+
+  def unfollow
+      host = User.find(params[:followed_id])
+      current_user.unfollow(host)
   end
 
   private

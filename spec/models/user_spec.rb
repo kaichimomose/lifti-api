@@ -65,7 +65,7 @@ RSpec.describe User, type: :model do
         end
 
         it "should have many get_kudos" do
-            assoc = User.reflect_on_association(:get_kudos)
+            assoc = User.reflect_on_association(:given_kudos)
             expect(assoc.macro).to eq :has_many
         end
     end

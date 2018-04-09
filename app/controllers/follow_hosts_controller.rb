@@ -5,7 +5,8 @@ class FollowHostsController < ApplicationController
   def create
       host = User.find(params[:followed_id])
       current_user.follow(host)
-    # @follow_host = FollowHost.new(follow_host_params)
+      @follow_host = current_user.active_relationships.find_by_followed_id(2)
+      render json: @follow_host, status: :created
     #
     # if @follow_host.save
     #   render json: @follow_host, status: :created, location: @follow_host

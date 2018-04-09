@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :users do
     member do
       get :following, :followers, :attend_experiences, :given_kudos
+      post :follow
+      delete :unfollow
     end
   end
 

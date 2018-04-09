@@ -3,6 +3,10 @@ class User < ApplicationRecord
     validates :email, presence: true, uniqueness: true
 
     has_many :experiences
+    has_many :kudos
+    has_many :get_kudos, class_name:  "Kudo",
+                         foreign_key: "taker_id",
+                         dependent:   :destroy
 
     has_many :attendances, class_name:  "Attendance",
                            foreign_key: "guest_id",
@@ -19,29 +23,13 @@ class User < ApplicationRecord
                                      dependent:   :destroy
     has_many :followers, through: :passive_relationships, source: :follower
 
-    has_many :active_relationships_as_guest, class_name:  "KudosToHost",
-                                             foreign_key: "guest_id",
-                                             dependent:   :destroy
-    has_many :gave_kudos_as_guest, through: :active_relationships_as_guest, source: :host
-
-    has_many :passive_relationships_as_host, class_name:  "KudosToHost",
-                                              foreign_key: "host_id",
-                                              dependent:   :destroy
-    has_many :given_kudos_as_host, through: :passive_relationships_as_host, source: :guest
-
-    has_many :active_relationships_as_host, class_name:  "KudosToGuest",
-                                            foreign_key: "host_id",
-                                            dependent:   :destroy
-    has_many :gave_kudos_as_host, through: :active_relationships_as_host, source: :guest
-
-    has_many :passive_relationships_as_guest, class_name:  "KudosToGuest",
-                                             foreign_key: "guest_id",
-                                             dependent:   :destroy
-    has_many :given_kudos_as_guest, through: :passive_relationships_as_guest, source: :host
-
     # attend experience.
     def attend(experience)
         attend_experiences << experience
+    end
+
+    def cancel(experience)
+        attend_experiences.delete(experience)
     end
 
     def follow(host)
@@ -58,19 +46,11 @@ class User < ApplicationRecord
         following.include?(host)
     end
 
-    def give_kudos_to_host(host)
-        gave_kudos_as_guest << host
+    def followers_counter()
+        followers.count
     end
 
-    def unkudos_to_host(host)
-        gave_kudos_as_guest.delete(host)
-    end
-
-    def give_kudos_to_guest(guest)
-        gave_kudos_as_host << guest
-    end
-
-    def unkudos_to_guest(guest)
-        gave_kudos_as_host.delete(guest)
+    def following_counter()
+        following.count
     end
 end

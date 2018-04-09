@@ -19,6 +19,11 @@ RSpec.describe User, type: :model do
     end
 
     describe "Associations" do
+        it "should have many kudos" do
+            assoc = User.reflect_on_association(:kudos)
+            expect(assoc.macro).to eq :has_many
+        end
+
         it "should have many experiences" do
             assoc = User.reflect_on_association(:experiences)
             expect(assoc.macro).to eq :has_many
@@ -54,43 +59,8 @@ RSpec.describe User, type: :model do
             expect(assoc.macro).to eq :has_many
         end
 
-        it "should have many active_relationships_as_guest" do
-            assoc = User.reflect_on_association(:active_relationships_as_guest)
-            expect(assoc.macro).to eq :has_many
-        end
-
-        it "should have many gave_kudos_as_guest" do
-            assoc = User.reflect_on_association(:gave_kudos_as_guest)
-            expect(assoc.macro).to eq :has_many
-        end
-
-        it "should have many passive_relationships_as_guest" do
-            assoc = User.reflect_on_association(:passive_relationships_as_guest)
-            expect(assoc.macro).to eq :has_many
-        end
-
-        it "should have many given_kudos_as_host" do
-            assoc = User.reflect_on_association(:given_kudos_as_host)
-            expect(assoc.macro).to eq :has_many
-        end
-
-        it "should have many active_relationships_as_host" do
-            assoc = User.reflect_on_association(:active_relationships_as_host)
-            expect(assoc.macro).to eq :has_many
-        end
-
-        it "should have many gave_kudos_as_host" do
-            assoc = User.reflect_on_association(:gave_kudos_as_host)
-            expect(assoc.macro).to eq :has_many
-        end
-
-        it "should have many passive_relationships_as_host" do
-            assoc = User.reflect_on_association(:passive_relationships_as_host)
-            expect(assoc.macro).to eq :has_many
-        end
-
-        it "should have many given_kudos_as_guest" do
-            assoc = User.reflect_on_association(:given_kudos_as_guest)
+        it "should have many get_kudos" do
+            assoc = User.reflect_on_association(:get_kudos)
             expect(assoc.macro).to eq :has_many
         end
     end

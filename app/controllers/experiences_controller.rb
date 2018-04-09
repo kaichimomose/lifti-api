@@ -10,12 +10,20 @@ class ExperiencesController < ApplicationController
 
   # GET /experiences/1
   def show
-    render json: @experience
+    render json: @experience, :methods => :user
+  end
+
+  # GET /experiences/1/guests
+  def guests
+    @experience  = Experience.find(params[:id])
+    @users = @experience.guests
+    render json: @users
   end
 
   # POST /experiences
   def create
     @experience = Experience.new(experience_params)
+    @experience.user = current_user
 
     if @experience.save
       render json: @experience, status: :created, location: @experience

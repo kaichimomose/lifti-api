@@ -10,7 +10,38 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    render json: @user
+    # render json: @user, :methods => :followers_count :following_count
+    @user.followers_count = @user.followers_counter
+    @user.following_count = @user.following_counter
+    render :json => @user
+  end
+
+  # GET /users/1/following
+  def following
+    @user  = User.find(params[:id])
+    @users = @user.following
+    render json: @users
+  end
+
+  # GET /users/1/followers
+  def followers
+    @user  = User.find(params[:id])
+    @users = @user.followers
+    render json: @users
+  end
+
+  # GET /users/1/attend_experiences
+  def attend_experiences
+    @user  = User.find(params[:id])
+    @experiences = @user.attend_experiences
+    render json: @experiences
+  end
+
+  # GET /users/1/given_kudos
+  def given_kudos
+    @user  = User.find(params[:id])
+    @kudos = @user.get_kudos
+    render json: @kudos
   end
 
   # POST /users
@@ -46,6 +77,6 @@ class UsersController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def user_params
-      params.permit(:name, :email, ,:title, :bio, :host)
+      params.permit(:name, :email, :title, :bio, :host)
     end
 end

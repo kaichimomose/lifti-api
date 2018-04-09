@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180408022309) do
+ActiveRecord::Schema.define(version: 20180409002315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,15 @@ ActiveRecord::Schema.define(version: 20180408022309) do
     t.index ["follower_id"], name: "index_follow_hosts_on_follower_id"
   end
 
+  create_table "kudos", force: :cascade do |t|
+    t.text "comments"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.integer "taker_id"
+    t.index ["user_id"], name: "index_kudos_on_user_id"
+  end
+
   create_table "kudos_to_guests", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -81,7 +90,10 @@ ActiveRecord::Schema.define(version: 20180408022309) do
     t.boolean "host"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "following_count"
+    t.integer "followers_count"
   end
 
   add_foreign_key "experiences", "users"
+  add_foreign_key "kudos", "users"
 end

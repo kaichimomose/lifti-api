@@ -12,9 +12,6 @@ class UsersController < ApplicationController
   # GET /users/1
   def show
     # render json: @user, :methods => :followers_count :following_count
-    @user.followers_count = @user.followers_counter
-    @user.following_count = @user.following_counter
-    @user.did_follow = current_user.following?(@user)
     render :json => @user
   end
 
@@ -36,14 +33,14 @@ class UsersController < ApplicationController
   def attend_experiences
     @user  = User.find(params[:id])
     @experiences = @user.attend_experiences
-    render json: @experiences
+    render json: @experiences, each_serializer: Experiences::IndexSerializer
   end
 
   # GET /users/1/given_kudos
   def given_kudos
     @user  = User.find(params[:id])
     @kudos = @user.given_kudos
-    render json: @kudos
+    render json: @kudos, each_serializer: Kudos::IndexSerializer
   end
 
   # POST /users
@@ -87,6 +84,12 @@ class UsersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
+      @user.followers_count = @user.followers_counter
+      @user.following_count = @user.following_counter
+      @user.did_follow = current_user.following?(@user)
+      @user.attendances_count = @user.attendances_counter
+      @user.kudos_count = @user.kudos_counter
+      @user.created_experience_count = @user.created_experience_counter
     end
 
     # Only allow a trusted parameter "white list" through.

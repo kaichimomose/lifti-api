@@ -4,14 +4,7 @@ class ExperiencesController < ApplicationController
   # GET /experiences
   def index
     @experiences = Experience.all
-    for experience in @experiences do
-        host = User.find(experience.user_id)
-        host.following_count = host.following_counter
-        host.followers_count = host.followers_counter
-        host.did_follow = current_user.following?(host)
-        experience.user = host
-    end
-    render json: @experiences
+    render json: @experiences, each_serializer: Experiences::IndexSerializer
   end
 
   # GET /experiences/1
@@ -20,8 +13,11 @@ class ExperiencesController < ApplicationController
     host.following_count = host.following_counter
     host.followers_count = host.followers_counter
     host.did_follow = current_user.following?(host)
+    host.attendances_count = host.attendances_counter
+    host.kudos_count = host.kudos_counter
+    host.created_experience_count = host.created_experience_counter
     @experience.user = host
-    render json: @experience
+    render json: @experience, serializer: Experiences::ShowSerializer
   end
 
   # GET /experiences/1/guests

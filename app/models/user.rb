@@ -3,6 +3,9 @@ class User < ApplicationRecord
     attribute :did_follow, :boolean
     attribute :followers_count, :integer
     attribute :following_count, :integer
+    attribute :kudos_count, :integer
+    attribute :attendances_count, :integer
+    attribute :created_experience_count, :integer
 
     validates :name, :password, presence: true
     validates :email, presence: true, uniqueness: true
@@ -61,6 +64,18 @@ class User < ApplicationRecord
 
     def following_counter()
         following.count
+    end
+
+    def kudos_counter()
+        given_kudos.count
+    end
+
+    def attendances_counter()
+        attend_experiences.count
+    end
+
+    def created_experience_counter()
+        experiences.count
     end
 
     # Checks if a user is authenticated

@@ -10,6 +10,11 @@ class User < ApplicationRecord
     validates :name, :password, presence: true
     validates :email, presence: true, uniqueness: true
 
+    has_attached_file :guest_image_file
+    validates_attachment :guest_image_file, content_type: { content_type: ['image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png', 'image/gif']}
+    has_attached_file :host_image_file
+    validates_attachment :host_image_file, content_type: { content_type: ['image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png', 'image/gif']}
+
     before_save :encrypt_password
     before_create :generate_token
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180409045207) do
+ActiveRecord::Schema.define(version: 20180412163150) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,10 @@ ActiveRecord::Schema.define(version: 20180409045207) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.string "experience_image_file_file_name"
+    t.string "experience_image_file_content_type"
+    t.integer "experience_image_file_file_size"
+    t.datetime "experience_image_file_updated_at"
     t.index ["user_id"], name: "index_experiences_on_user_id"
   end
 
@@ -93,6 +97,14 @@ ActiveRecord::Schema.define(version: 20180409045207) do
     t.string "token"
     t.string "password_hash"
     t.string "password_salt"
+    t.string "guest_image_file_file_name"
+    t.string "guest_image_file_content_type"
+    t.integer "guest_image_file_file_size"
+    t.datetime "guest_image_file_updated_at"
+    t.string "host_image_file_file_name"
+    t.string "host_image_file_content_type"
+    t.integer "host_image_file_file_size"
+    t.datetime "host_image_file_updated_at"
     t.index ["token"], name: "index_users_on_token"
   end
 

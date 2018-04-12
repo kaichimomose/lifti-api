@@ -61,6 +61,6 @@ class ExperiencesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def experience_params
-      params.permit(:name, :genre, :place, :start_day, :end_day, :price, :capacity, :details, :schedule)
+      params.permit(:name, :genre, :place, :start_day, :end_day, :price, :capacity, :details, :schedule, :experience_image_file)
     end
 end
